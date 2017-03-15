@@ -129,7 +129,7 @@ func (srv *server) processSubmission(sr *submissionRequest) {
 	}
 
 	err = srv.reportsCollection.Insert(bson.M{
-		"submitted": time.Now().UnixNano(),
+		"submitted": time.Now(),
 		"serverIP":  sr.ServerIP,
 		"source":    sr.Source, // should check that this is something we expect
 		"domain":    sr.Domain,
@@ -170,7 +170,7 @@ func (srv *server) addChain(chain []*x509.Certificate) (string, error) {
 				"seen": 1,
 			},
 			"$set": bson.M{
-				"lastSeen": time.Now().UnixNano(),
+				"lastSeen": time.Now(),
 			},
 		})
 		if err != nil {
@@ -194,7 +194,7 @@ func (srv *server) addChain(chain []*x509.Certificate) (string, error) {
 	// process the chain and insert
 	chainData := cat.ProcessChain(chain, srv.chainParsers)
 
-	now := time.Now().UnixNano()
+	now := time.Now()
 	chainData["firstSeen"] = now
 	chainData["lastSeen"] = now
 	chainData["seen"] = 1
